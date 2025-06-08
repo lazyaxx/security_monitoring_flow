@@ -1,0 +1,48 @@
+# crews/security_crew/config/tasks.yaml
+
+url_analysis_task:
+  description: >
+    Analyze the URL: {url} for security threats.
+    
+    IMPORTANT: Use EXACTLY this format:
+    
+    Action: url_analyzer
+    Action Input: {"url": "{url}"}
+    
+    The action name must be exactly "url_analyzer" - no other words.
+    After getting the result, provide your final assessment.
+  expected_output: >
+    Complete URL security analysis with threat assessment.
+  agent: url_analyzer_agent
+
+soc_communication_task:
+  description: >
+    Send the URL analysis results to SOC admin.
+    
+    IMPORTANT: Use EXACTLY this format:
+    
+    Action: soc_communicator
+    Action Input: {"analysis_data": "results from previous task"}
+    
+    The action name must be exactly "soc_communicator" - no other words.
+  expected_output: >
+    SOC admin response with severity and action recommendation.
+  agent: soc_communication_agent
+
+gatekeeper_monitoring_task:
+  description: >
+    Make final security decision using the gatekeeper_monitor tool ONCE.
+    
+    WORKFLOW:
+    1. Call gatekeeper_monitor with: {"context": "analysis and soc results"}
+    2. Review the tool output
+    3. Provide Final Answer with your decision
+    
+    DO NOT call the tool multiple times. One call provides all needed information.
+    After getting the tool result, immediately provide your Final Answer.
+  expected_output: >
+    Final gatekeeper decision with:
+    - Final action (allow/block/review)
+    - Reasoning based on tool output
+    - Security policy compliance status
+  agent: gatekeeper_agent
